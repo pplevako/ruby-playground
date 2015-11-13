@@ -1,3 +1,5 @@
+# http://www.reactive.io/tips/2008/12/21/understanding-ruby-blocks-procs-and-lambdas/
+
 # # # array = [1, 2, 3, 4]
 # # #
 # # # array.collect! do |n|
@@ -74,20 +76,32 @@
 #
 # args(lambda{|a, b, c| puts "Give me a #{a} and a #{b} and a #{c.class}"})
 
-def proc_return(code)
-  code.call
+
+# This works:
+def proc_return
+  Proc.new { return 'Proc.new' }
   'proc_return method finished'
 end
+
+puts proc_return
 
 def lambda_return
   lambda { return 'lambda' }.call
   'lambda_return method finished'
 end
 
-p = Proc.new { return 'Proc.new' }
-
-puts proc_return(p)
 puts lambda_return
+
+# But this won't
+# def proc_return(code)
+#   code.call
+#   'proc_return method finished'
+# end
+
+# p = Proc.new { return 'Proc.new' }
+# puts proc_return(p)
+
+
 
 # def generic_return(code)
 #   one, two    = 1, 2
@@ -104,4 +118,18 @@ puts lambda_return
 #
 # puts generic_return(Proc.new { |x, y| [x + 2, y + 2] })
 
-method(:puts).owner
+def some_function
+  @test = 6
+end
+
+def other_function
+  puts @test
+end
+
+
+# method(:puts).owner
+
+# puts method(:some_function).owner
+
+some_function
+other_function
